@@ -11,7 +11,7 @@ public class CommonResult<T> {
     /**
      * 状态码
      */
-    private long code;
+        private long code;
     /**
      * 提示信息
      */
