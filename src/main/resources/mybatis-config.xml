@@ -24,7 +24,7 @@
      | defaultStatementTimeout     null,     设置一个时限，以决定让驱动器等待数据库回应的多长时间为超时
      | -->
     <settings>
-        <!--<setting name="logImpl" value="LOG4J2"/>-->
+        <setting name="logImpl" value="LOG4J2"/>
         <!-- 这个配置使全局的映射器启用或禁用缓存 -->
         <setting name="cacheEnabled" value="true"/>
         <setting name="mapUnderscoreToCamelCase" value="true"/>

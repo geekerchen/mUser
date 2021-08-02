@@ -1,6 +1,6 @@
 package cn.muser.chen.controller;
 
-import cn.muser.chen.api.CommonResult;
+import cn.muser.chen.api.R;
 import cn.muser.chen.dto.AdminLoginParam;
 import cn.muser.chen.service.AdminService;
 import io.swagger.annotations.Api;
@@ -36,15 +36,15 @@ public class AdminController {
     @ApiOperation(value = "登录以后返回token")
     @GetMapping("/login")
     @ResponseBody
-    public CommonResult login(@Validated @RequestBody AdminLoginParam loginParam) {
+    public R login(@Validated @RequestBody AdminLoginParam loginParam) {
         String token = adminService.login(loginParam.getUsername(), loginParam.getPassword());
         if (token == null) {
-            return CommonResult.validateFailed("用户名或密码错误");
+            return R.validateFailed("用户名或密码错误");
         }
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         tokenMap.put("tokenHead", tokenHead);
-        return CommonResult.success(tokenMap);
+        return R.success(tokenMap);
     }*/
 
 }

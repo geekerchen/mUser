@@ -46,6 +46,18 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>-->
 
+        <!-- MyBatis-->
+<!--        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatisplus-spring-boot-starter</artifactId>
+            <version>1.0.5</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+
         <!--MyBatis分页插件starter-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -53,11 +65,11 @@
             <version>${pagehelper-starter.version}</version>
         </dependency>
         <!--MyBatis分页插件-->
-        <dependency>
+      <!--  <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>${pagehelper.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!--JWT(Json Web Token)登录支持-->
        <!-- <dependency>
@@ -90,12 +102,7 @@
             <version>${hutool.version}</version>
         </dependency>
 
-        <!-- MyBatis-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
+
 
         <!--集成druid连接池-->
         <dependency>
@@ -111,6 +118,11 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>2.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

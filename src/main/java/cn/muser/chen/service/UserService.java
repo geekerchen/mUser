@@ -1,27 +1,31 @@
 package cn.muser.chen.service;
 
-import cn.muser.chen.api.CommonPage;
-import cn.muser.chen.api.CommonResult;
+import cn.muser.chen.api.R;
 import cn.muser.chen.entry.TUser;
+import com.github.pagehelper.PageInfo;
 
 import java.util.Map;
 
 public interface UserService {
 
-    CommonResult<CommonPage<TUser>> list(Map<String, Object> paramsMap);
+    R<PageInfo<TUser>> list(int pageNum, int pageSize, Map<String, Object> paramsMap);
 
-    CommonResult<TUser> getUserById(String id);
+    R<TUser> getUserById(int id);
 
-    CommonResult<TUser> add(TUser user);
+    R<TUser> add(TUser user);
 
-    CommonResult<TUser> delete(String id);
+    R<TUser> delete(int id);
 
-    CommonResult<TUser> edit(TUser user);
+    R<TUser> edit(TUser user);
 
-    CommonResult login(String mobile, String password);
+    R login(String mobile, String password);
 
     /**
      * 获取用户信息
      */
     TUser getUserByMobile(String username);
+
+    R<TUser> status(int id, String status);
+
+    R<TUser> register(TUser user);
 }

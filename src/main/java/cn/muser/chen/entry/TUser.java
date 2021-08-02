@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -35,6 +36,7 @@ public class TUser implements Serializable {
     private Integer pwdSalt;
 
     @ApiModelProperty(value = "最后登录时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="Asia/Shanghai")
     @TableField(value = "last_login_time")
     private Date lastLoginTime;
 
@@ -55,6 +57,7 @@ public class TUser implements Serializable {
     private String nickname;
 
     @ApiModelProperty(value = "出生日期")
+    @JsonFormat(pattern = "yyyy/MM/dd",timezone="Asia/Shanghai")
     @TableField(value = "birthday")
     private Date birthday;
 
@@ -71,18 +74,22 @@ public class TUser implements Serializable {
     private String status;
 
     @TableField(value = "create_time")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone="Asia/Shanghai")
     private Date createTime;
 
     @TableField(value = "create_by")
     private Integer createBy;
 
     @TableField(value = "update_time")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone="Asia/Shanghai")
     private Date updateTime;
 
     @TableField(value = "update_by")
     private Integer updateBy;
 
-    @TableField(value = "pwd_salt")
+    @TableField(exist = false)
+    private int regWays;
+
     private static final long serialVersionUID = 1L;
 
 
