@@ -64,23 +64,17 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper-starter.version}</version>
         </dependency>
-        <!--MyBatis分页插件-->
-      <!--  <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>${pagehelper.version}</version>
-        </dependency>-->
 
-        <!--JWT(Json Web Token)登录支持-->
-       <!-- <dependency>
-            <
-            <version>${jjwt.version}</version>
-        </dependency>-->
-      <!--  <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.4.1</version>
-        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!-- spring-boot redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 
         <!--Swagger-UI API文档生产工具-->
         <dependency>
@@ -101,8 +95,6 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
         </dependency>
-
-
 
         <!--集成druid连接池-->
         <dependency>

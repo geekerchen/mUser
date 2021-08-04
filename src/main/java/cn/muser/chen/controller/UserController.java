@@ -1,5 +1,6 @@
 package cn.muser.chen.controller;
 
+import cn.hutool.http.HttpRequest;
 import cn.muser.chen.api.R;
 import cn.muser.chen.dto.AdminLoginParam;
 import cn.muser.chen.entry.TUser;
@@ -30,17 +31,20 @@ public class UserController {
 
     @PostMapping("/login")
     public R login(@Validated @RequestBody  AdminLoginParam loginParam) {
-        return userService.login(loginParam.getUsername(), loginParam.getPassword());
+        return userService.login(loginParam.getUsername(), loginParam.getPassword(),loginParam.getEquipment());
     }
 
 
     @GetMapping("/info")
-    public R info() {
+    public R info(Integer token) {
         Map<String, Object> map = new HashMap<>();
         map.put("roles","[admin]");
         map.put("name","admin");
+        R<TUser> u = userService.getUserById(token);
+
         map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        return R.success(map);
+        map.put("user",u.getData());
+        return R.success(u);
     }
 
     @PostMapping("/logout")
@@ -97,5 +101,11 @@ public class UserController {
     @DeleteMapping("/{id}/{status}")
     public R<TUser> status(@PathVariable int id,@PathVariable String status){
         return userService.status(id,status);
+    }
+
+    @ApiOperation("用户状态")
+    @DeleteMapping("/{id}/{status}")
+    public R upload(HttpRequest request){
+        return R.success(null);
     }
 }

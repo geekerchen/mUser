@@ -1,5 +1,8 @@
 package cn.muser.chen;
 
+import cn.hutool.crypto.BCUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.BCrypt;
 import cn.muser.chen.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,18 @@ class MUserWebApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(1);
+        BCrypt bCrypt = new BCrypt();
+        String db = "$2a$10$9C3bCKV7S.LaBFU1aBisDe1Q.zCChCqSKhqGJUEU7Pq/NwtFYzjdu";
+        String password ="123456";
+        String salt = bCrypt.gensalt(10);
+        String hashed = bCrypt.hashpw(password,"123");
+        System.out.println(hashed);
+        System.out.println(salt);
+        if(bCrypt.checkpw(password,db)){
+            System.out.println(1);
+        }else {
+            System.out.println(2);
+        }
 
     }
 
@@ -37,7 +51,7 @@ class MUserWebApplicationTests {
     @Test
     void userLogin() {
 
-        System.out.println(userService.login("admin","123456"));
+        System.out.println(userService.login("admin","123456","iphone12"));
 
     }
 

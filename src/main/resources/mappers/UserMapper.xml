@@ -15,6 +15,9 @@
         ${map.sort}
     </select>
 
+    <select id="selectByMobile"  resultType="cn.muser.chen.entry.TUser">
+        select * from t_user where mobile = #{mobile} and (status = 'VALID' or status = 'FROZEN')
+    </select>
 
     <sql id="where">
         <where>

@@ -33,7 +33,7 @@ public class TUser implements Serializable {
 
     @ApiModelProperty(value = "密码盐")
     @TableField(value = "pwd_salt")
-    private Integer pwdSalt;
+    private String pwdSalt;
 
     @ApiModelProperty(value = "最后登录时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="Asia/Shanghai")

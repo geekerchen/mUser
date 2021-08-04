@@ -21,5 +21,8 @@ public class AdminLoginParam {
     @NotEmpty
     @ApiModelProperty(value = "密码",required = true)
     private String password;
+
+    @ApiModelProperty(value = "设备")
+    private String equipment;
 }
 

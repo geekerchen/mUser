@@ -1,5 +1,6 @@
 package cn.muser.chen.service.impl;
 
+import cn.hutool.crypto.digest.BCrypt;
 import cn.muser.chen.api.R;
 import cn.muser.chen.dao.UserDao;
 import cn.muser.chen.entry.TUser;
@@ -69,32 +70,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public R register(TUser user) {
-        this.add(user);
-        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mobile",user.getMobile())
-                .eq("status","VALID");
-        TUser u = userDao.selectOne(queryWrapper);
-        u.setCreateBy(u.getId());
-        return R.success(null,"注册成功");
+        TUser u = getUserByMobile(user.getMobile());
+        if(u!=null){
+            return R.failed("该手机已注册");
+        }else{
+            String salt = BCrypt.gensalt(10);
+            String hashedPassword = BCrypt.hashpw(user.getPwd(), salt);
+            user.setPwdSalt(salt);
+            user.setPwd(hashedPassword);
+            int i = userDao.insert(user);
+            TUser uer = getUserByMobile(user.getMobile());
+            user.setCreateBy(user.getId());
+            userDao.updateById(user);
+            return R.success(null,"注册成功");
+        }
     }
 
 
     @Override
     public R add(TUser user) {
-        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
-        //手机号已注册 ，并且注销的
-        queryWrapper.eq("mobile",user.getMobile())
-                .eq("status","DEL");
-        TUser u = userDao.selectOne(queryWrapper);
-        if(u == null){
+        TUser u = getUserByMobile(user.getMobile());
+        if(u!=null){
+            return R.failed("该手机已注册");
+        }else {
+            String salt = BCrypt.gensalt(10);
+            String hashedPassword = BCrypt.hashpw(user.getPwd(), salt);
+            user.setPwdSalt(salt);
+            user.setPwd(hashedPassword);
             int i = userDao.insert(user);
             if(i > 0){
                 return R.success(user,"添加成功");
             }else {
                 return R.failed("添加失败");
             }
-        }else {
-            return R.failed("该手机已注册");
         }
     }
 
@@ -112,6 +120,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public R<TUser> edit(TUser user) {
+        String salt = BCrypt.gensalt(10);
+        String hashedPassword = BCrypt.hashpw(user.getPwd(), salt);
+        user.setPwdSalt(salt);
+        user.setPwd(hashedPassword);
+        user.setUpdateTime(new Date());
         int i = userDao.updateById(user);
         if(i > 0){
             return R.success(null,"更新成功");
@@ -121,20 +134,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public R login(String mobile, String password) {
-        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mobile",mobile);
-        TUser u = userDao.selectOne(queryWrapper);
+    public R login(String mobile, String password,String equipment) {
+        TUser u = getUserByMobile(mobile);
         //PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //用户存在
         if (u != null ){
             //密码正确通过
-            if(password.equals(u.getPwd()) && "VALID".equals(u.getStatus())){
+            boolean validPwd = BCrypt.checkpw(password,u.getPwd());
+            if(validPwd && "VALID".equals(u.getStatus())){
                 Map<String,Object> m = new HashMap<>();
-                m.put("token","admin");
+                //把ID 传作token
+                m.put("token",u.getId());
                 u.setLastFailedTimes(0);
                 u.setLastLoginTime(new Date());
-                u.setLastLoginEqpt("iphone 12 pro max");
+                u.setLastLoginEqpt(equipment);
                 try {
                     u.setLastLoginIp(String.valueOf(Inet4Address.getLocalHost()));
                 } catch (UnknownHostException e) {
@@ -142,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 }
                 userDao.updateById(u);
                 return R.success(m, "登录成功");
-            }else if(password.equals(u.getPwd()) &&  "FROZEN".equals(u.getStatus())){
+            }else if(validPwd &&  "FROZEN".equals(u.getStatus())){
                 //密码正确 用户被锁定
                 return R.success(null, "用户已被锁定");
             }else if("DEL".equals(u.getStatus())){
@@ -178,10 +191,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public TUser getUserByMobile(String username) {
         QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mobile",username);
-        TUser u = userDao.selectOne(queryWrapper);
-        if(u != null){
-            return u;
+        String[] status = {"VALID","FROZEN"};
+        queryWrapper.eq("mobile",username)
+                .in("status",status);
+        List<TUser> list = userDao.selectList(queryWrapper);
+        if(list.size() > 0){
+            return list.get(0);
         }
         return null;
     }
